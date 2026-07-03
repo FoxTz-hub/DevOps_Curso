@@ -48,10 +48,16 @@ def criar_tarefa(titulo: str, descricao: str):
     return tarefa
 
 @APP.put("/tarefas/atualizar/{id}")
-def atualizar_tarefa(id: int, titulo: str, descricao: str):
+def atualizar_tarefa(id: int, titulo: str = "", descricao: str = "", concluido: bool = False):
     if id >= 0 and id < len(LISTA_TAREFAS):
-        LISTA_TAREFAS[id] = nova_tarefa(id, titulo, descricao)
-        return LISTA_TAREFAS[id]
+        tarefa = LISTA_TAREFAS[id]
+        if titulo:
+            tarefa['titulo'] = titulo
+        if descricao:
+            tarefa['descricao'] = descricao
+        if concluido == True:
+            requests.post(f"http://localhost:8001/notificacao?titulo={tarefa['titulo']}&data={datetime.now()}")
+        return tarefa
 
     return {"mensagem": "Não existe nenhuma tarefa com esse id"}
 
