@@ -2,10 +2,10 @@ name: 'Pipeline 04/07/26'
 
 on:
   # Habilita botão na interface Web para acionar manualmente a pipeline
-  workflow_dispatch:
   push:
     branches:
       - main
+    workflow_dispatch:
 
 jobs:
   integracao:
@@ -18,6 +18,8 @@ jobs:
         run: pip install -r requirements.txt
       - name: 'Testes unitários'
         run: pytest
+      - name: 'Cobertura de código'
+        run: pytest --cov --cov-fail-under=80
       - name: 'Analise de código'
         run: bandit -r app/
       - name: 'Linting'
