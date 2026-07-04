@@ -1,0 +1,17 @@
+services:
+  tarefas:
+    build:
+      context: .
+
+  notificacoes:
+    build:
+      context: .
+    command: uvicorn notificacao:APP_NOTIFICACAO --host 0.0.0.0 --port 8000
+
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "80:8002"
+      
