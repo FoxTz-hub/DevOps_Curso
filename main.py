@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from datetime import  datetime
 
+import requests
+
 LISTA_TAREFAS = []
 APP = FastAPI()
 
@@ -12,6 +14,13 @@ def nova_tarefa(id: int, titulo: str, descricao: str):
         "concluido": False,
         "criado_em": datetime.now()
     }
+
+def verificar_existencia_tarefa(id: int):
+    """Função auxiliar para verificar a existência de uma tarefa com base no seu ID"""
+    for tarefa in LISTA_TAREFAS:
+        if id == tarefa['id']:
+            return True
+    return False
 
 @APP.get("/")
 def index():
@@ -49,17 +58,33 @@ def criar_tarefa(titulo: str, descricao: str):
 
 @APP.put("/tarefas/atualizar/{id}")
 def atualizar_tarefa(id: int, titulo: str = "", descricao: str = "", concluido: bool = False):
-    if id >= 0 and id < len(LISTA_TAREFAS):
-        tarefa = LISTA_TAREFAS[id]
-        if titulo:
-            tarefa['titulo'] = titulo
-        if descricao:
-            tarefa['descricao'] = descricao
-        if concluido == True:
-            requests.post(f"http://localhost:8001/notificacao?titulo={tarefa['titulo']}&data={datetime.now()}")
-        return tarefa
+    global LISTA_TAREFAS
 
-    return {"mensagem": "Não existe nenhuma tarefa com esse id"}
+    tarefa_existe = verificar_existencia_tarefa(id)
+
+    if not tarefa_existe:
+        return {"mensagem": "TAREFA NÃO EXISTE!"}
+    
+    tarefa = None
+    for indice in range(len(LISTA_TAREFAS)):
+        tarefa = LISTA_TAREFAS[indice]
+
+        # Sai do loop
+        if tarefa['id'] == id:
+            break
+    
+    if titulo != "":
+        LISTA_TAREFAS[indice]['titulo'] = titulo
+    
+    if descricao !=  "": 
+        LISTA_TAREFAS[indice]['descricao'] = descricao
+    
+    if concluido == True:
+        requests.post(f"http://localhost:8002/notificar?titulo={tarefa['titulo']}&data_finalizacao={datetime.now()}")
+
+    LISTA_TAREFAS[indice]['concluido'] = concluido
+
+    return {"mensagem": "OK"}
 
 @APP.delete("/tarefas/deletar/{id}")
 def excluir_tarefa(id: int):
