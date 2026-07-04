@@ -35,8 +35,7 @@ def listar_tarefas():
     tarefas = []
     for tarefa in LISTA_TAREFAS:
         info = {"id": tarefa['id'], "titulo": tarefa['titulo']}
-        tarefas.append(info)
-    
+        tarefas.append(info) 
     return tarefa
 
 @APP.get("/tarefas/{id}")
