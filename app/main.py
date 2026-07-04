@@ -49,12 +49,12 @@ def listar_tarefas_especifica(id: int):
 
     return {"mensagem": "Não existe nenhuma tarefas com esse id"}
 
-@APP.post("/tarefas/criar")
+@APP.post("/tarefas/criar", status_code=201)
 def criar_tarefa(titulo: str, descricao: str):
     id = len(LISTA_TAREFAS)
     tarefa = nova_tarefa(id, titulo, descricao)
     LISTA_TAREFAS.append(tarefa)
-    return tarefa
+    return {"mensagem": "Tarefa criada com sucesso!"}
 
 @APP.put("/tarefas/atualizar/{id}")
 def atualizar_tarefa(id: int, titulo: str = "", descricao: str = "", concluido: bool = False):
