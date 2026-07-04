@@ -24,7 +24,6 @@ jobs:
         run: bandit -r app/
       - name: 'Linting'
         run: pylint app/ || true
-
 entrega:
   needs: integracao
   name: 'Entrega'
