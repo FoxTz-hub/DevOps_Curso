@@ -92,4 +92,8 @@ def excluir_tarefa(id: int):
         LISTA_TAREFAS.pop(id)
         return {"mensagem": "Tarefa excluída com sucesso"}
 
-    return {"mensagem": "Não existe nenhuma tarefa com esse id"}   
+    return {"mensagem": "Não existe nenhuma tarefa com esse id"}
+
+@APP.get("/health")
+def health():
+    return {"status": "ok"}   
