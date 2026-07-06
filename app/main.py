@@ -96,4 +96,4 @@ def excluir_tarefa(id: int):
 
 @APP.get("/health")
 def health():
-    return {"status": "ok"}   
+    return {"status": "ok, retorno esperado"}   

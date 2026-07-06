@@ -67,4 +67,4 @@ def test_health():
     requisicao = CLIENT.get("/health")
 
     assert requisicao.status_code == 200
-    assert requisicao.json() == {"status": "ok"}
+    assert requisicao.json() == {"status": "ok, retorno esperado"}
