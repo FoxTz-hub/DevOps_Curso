@@ -35,7 +35,7 @@ jobs:
         with:
           api-key: ${{ secrets.FOSSA_API_KEY }}
   entrega:
-    needs: integracao
+    needs: [integracao, fossa]
     name: 'Entrega'
     runs-on: ubuntu-latest
     steps:
