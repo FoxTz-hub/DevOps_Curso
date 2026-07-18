@@ -81,7 +81,7 @@ def listar_tarefas_especifica(id: int):
         return LISTA_TAREFAS[id]
 
     return {
-        "mensagem": "Não existe nenhuma tarefa com esse id"
+        "mensagem": "Não existe nenhuma tarefas com esse id"
     }
 
 
