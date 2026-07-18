@@ -54,7 +54,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: hrchlhck/curso-devops:latest
+          image: devops-api:latest
           ports:
             - containerPort: 8000
 ---
