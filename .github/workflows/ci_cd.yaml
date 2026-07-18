@@ -51,4 +51,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: 'Aplicacao do manifesto'
-        run: kubectl delete -f deployment.yaml && kubectl apply -f deployment.yaml
+        run: |
+          kubectl delete -f deployment.yaml --ignore-not-found=true
+          kubectl apply -f deployment.yaml
