@@ -1,9 +1,17 @@
 from fastapi import FastAPI
-from datetime import datetime
+from datetime import datetime, timedelta
 import requests
 import logging
 
 LISTA_TAREFAS = []
+METRICAS = {
+    'qntd_tarefas': 0,
+    'qntd_pendentes': 0,
+    'qntd_concluidas': 0,
+    'qntd_atualizadas': 0,
+    'qntd_removidas': 0,
+    'qntd_tempo_medio': 0
+}
 
 APP = FastAPI()
 
@@ -101,6 +109,7 @@ def criar_tarefa(titulo: str, descricao: str):
     return {
         "mensagem": "Tarefa criada com sucesso!"
     }
+    METRICAS['qntd_tarefas'] += 1
 
 
 @APP.put("/tarefas/atualizar/{id}")
@@ -110,7 +119,7 @@ def atualizar_tarefa(
     descricao: str = "",
     concluido: bool = False
 ):
-    global LISTA_TAREFAS
+    global LISTA_TAREFAS, METRICAS
 
     tarefa_existe = verificar_existencia_tarefa(id)
 
@@ -145,7 +154,7 @@ def atualizar_tarefa(
     LISTA_TAREFAS[indice]["concluido"] = concluido
     LOGGER.debug(f"Tarefa atualizada = {LISTA_TAREFAS[indice]}")
     LOGGER.info(f"Rota PUT '/tarefas/atualizar/{id}' acessada. Tarefa id={id} atualizada.")
-
+    METRICAS['qntd_atualizadas'] += 1
     return {
         "mensagem": "OK"
     }
@@ -156,7 +165,7 @@ def excluir_tarefa(id: int):
     if id >= 0 and id < len(LISTA_TAREFAS):
         LISTA_TAREFAS.pop(id)
         LOGGER.info(f"Rota DELETE '/tarefas/{id}' acessada. Tarefa id={id} removida.")
-
+        METRICAS['qntd_removidas'] += 1
         return {
             "mensagem": "Tarefa excluída com sucesso"
         }
@@ -171,3 +180,17 @@ def health():
     return {
         "status": "ok, retorno esperado"
     }
+
+@APP.get("/metricas")
+def metricas():
+    tempo_medio_total = timedelta()
+
+    for tarefa in LISTA_TAREFAS:
+        if tarefa['concluido']:
+            tempo_medio = tarefa['concluido_em'] - tarefa['criado_em']
+            tempo_medio_total += tempo_medio
+    METRICAS['qntd_tempo_medio'] = tempo_medio_total / METRICAS['qntd_concluidas']
+
+    LOGGER.info("Rota '/mestricas' acessada.")
+
+    return metricas
