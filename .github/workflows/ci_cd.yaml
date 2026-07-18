@@ -43,7 +43,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/curso-devops:latest
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/devops-api:latest
   implantacao:
     runs-on: self-hosted
     needs: entrega
