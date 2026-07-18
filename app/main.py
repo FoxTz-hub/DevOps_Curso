@@ -162,7 +162,7 @@ def excluir_tarefa(id: int):
         }
 
     return {
-        "mensagem": "Não existe nenhuma tarefa com esse id"
+        "mensagem": "Não existe nenhuma tarefas com esse id"
     }
 
 

@@ -29,7 +29,7 @@ def test_remover_tarefa():
 
     requisicao = CLIENT.delete("/tarefas/deletar/10")
     assert requisicao.status_code == 200
-    assert requisicao.json() == {"mensagem": "Não existe nenhuma tarefa com esse id"}
+    assert requisicao.json() == {"mensagem": "Não existe nenhuma tarefas com esse id"}
 
 def test_listar_tarefas():
     criar_tarefa_mock()
